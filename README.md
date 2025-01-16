@@ -13,5 +13,3 @@ This project leverages Llama 3.2 vision and Streamlit to create a locally runnin
   ```bash
    streamlit run ocr.py
   ```
-
----
