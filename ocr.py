@@ -1,6 +1,7 @@
 import streamlit as st
 import ollama
 from PIL import Image
+import time
 
 # Page configuration
 st.set_page_config(
@@ -45,27 +46,35 @@ with st.sidebar:
         image = Image.open(uploaded_file)
         st.image(image, caption="Uploaded Image", use_container_width=True)
         
-        if st.button("Extract Text \U0001f5d1\ufe0f", type="primary", help="Process the uploaded image to extract text"):
-            with st.spinner("Processing image..."):
+        if st.button("Extract Text 🔍", type="primary", help="Process the uploaded image to extract text"):
+           with st.spinner("Processing image..."):
                 try:
+                    st.write("Calling the API...")
                     response = ollama.chat(
                         model='llama3.2-vision',
                         messages=[{
                             'role': 'user',
                             'content': """Analyze the text in the provided image. Extract all readable content
-                                        and present it in a structured Markdown format that is clear, concise, 
-                                        and well-organized. Ensure proper formatting (e.g., headings, lists, or
-                                        code blocks) as necessary to represent the content effectively.""",
+                                          and present it in a structured Markdown format that is clear, concise, 
+                                          and well-organized. Ensure proper formatting (e.g., headings, lists, or
+                                          code blocks) as necessary to represent the content effectively.""",
                             'images': [uploaded_file.getvalue()]
                         }]
                     )
                     st.session_state['ocr_result'] = response.message.content
-                    st.success("Text extracted successfully! Check the results below.")
+                    st.success("Text extraction successful!")
                 except Exception as e:
-                    st.error(f"Error processing image: {str(e)}")
+                    st.error(f"Failed to process the image: {str(e)}")
+
 
 # Main content area for results
 if 'ocr_result' in st.session_state:
     st.markdown(st.session_state['ocr_result'])
 else:
-    st.info("Upload an image and click 'Extract Text' to see the results here.")
+    st.markdown(
+    "<p style='color: #333; background-color: #e9ecef; padding: 10px; border-radius: 5px;'>"
+    "Upload an image and click 'Extract Text' to see the results here."
+    "</p>",
+    unsafe_allow_html=True
+)
+
