@@ -11,12 +11,20 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Add light grey background
+# Add light grey background and ensure text is black
 st.markdown(
     """
     <style>
     .stApp {
         background-color: #f8f9fa;
+    }
+    /* Make sure all text content is black */
+    .stMarkdown, .stText {
+        color: #000000 !important;
+    }
+    /* Ensure markdown content is black */
+    .element-container div.stMarkdown p {
+        color: #000000 !important;
     }
     </style>
     """,
